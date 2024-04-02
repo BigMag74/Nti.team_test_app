@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.ntiteamtestapp.R
-import com.example.ntiteamtestapp.domain.model.ProductCard
 import com.example.ntiteamtestapp.presentation.theme.NtiteamTestAppTheme
 import com.example.ntiteamtestapp.presentation.theme.Orange
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,6 +35,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val categories = viewModel.categories.value
+            val products = viewModel.products.value
             NtiteamTestAppTheme {
                 val productsPriceCount = remember {
                     mutableIntStateOf(0)
@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
                         CategoryChips(categories = categories) {
                             Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
                         }
-                        ProductLazyColumn(productsPriceCount = productsPriceCount)
+                        ProductLazyColumn(productsPriceCount = productsPriceCount, products = products)
                     }
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -85,18 +85,9 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-val product = ProductCard(2, 0, "Название блюда", "1.png", 500, "г", 500, 800, listOf(1, 2, 4))
+//val product = Product(2, 0, "Название блюда", "1.png", 500, "г", 500, 800, listOf(1, 2, 4))
 
-val products = listOf(
-    product, product.copy(priceOld = null, tagIds = listOf(4)), product.copy(tagIds = listOf()), product, product
-)
-
-//val categories = listOf(
-//    "Роллы",
-//    "Сяки мяки",
-//    "Бургеры",
-//    "Свинина",
-//    "Говядина",
-//    "Филадельфия",
-//    "Еще что то"
+//val products = listOf(
+//    product, product.copy(priceOld = null, tagIds = listOf(4)), product.copy(tagIds = listOf()), product, product
 //)
+

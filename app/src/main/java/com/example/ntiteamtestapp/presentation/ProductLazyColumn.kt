@@ -35,10 +35,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.example.ntiteamtestapp.R
+import com.example.ntiteamtestapp.domain.model.Product
 import com.example.ntiteamtestapp.presentation.theme.GrayBg
 
 @Composable
-fun ProductLazyColumn(productsPriceCount: MutableIntState) {
+fun ProductLazyColumn(productsPriceCount: MutableIntState,
+                      products: List<Product>) {
     LazyVerticalGrid(
         modifier = Modifier.padding(PaddingValues(horizontal = 4.dp)),
         columns = GridCells.Fixed(2)
@@ -57,7 +59,7 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState) {
                     .clip(RoundedCornerShape(8.dp))
                     .background(GrayBg)
             ) {
-                if (product.tagIds.isNotEmpty()) {
+                if (product?.tagIds?.isNotEmpty() == true) {
                     LazyRow {
                         items(product.tagIds) { tag ->
                             when (tag) {
