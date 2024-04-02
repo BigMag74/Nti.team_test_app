@@ -27,7 +27,7 @@ class MainScreenRepositoryImpl(
         }
     }
 
-    override fun getAllProductsUseCase(): Flow<Pair<List<Product>?, ErrorStatus?>> = flow {
+    override fun getAllProducts(): Flow<Pair<List<Product>?, ErrorStatus?>> = flow {
         val response = networkClient.doRequest(ProductsRequest())
         when (response.resultCode) {
             -1 -> emit(Pair(null, ErrorStatus.NO_CONNECTION))
@@ -36,11 +36,15 @@ class MainScreenRepositoryImpl(
         }
     }
 
-    override fun getProductsByCategoryId(categoryId: Int) {
-        //TODO("Not yet implemented")
+    override suspend fun addProductsToDB(product: ProductEntity) {
+        appDatabase.cartDao().insertProduct(product)
     }
 
-    override suspend fun addProductsToDBUseCase(products: List<ProductEntity>) {
-        appDatabase.productDao().insertProducts(products)
+    override suspend fun deleteProductFromDB(product: ProductEntity) {
+        appDatabase.cartDao().deleteProduct(product)
+    }
+
+    override suspend fun deleteAllProductsFromDB() {
+        appDatabase.clearAllTables()
     }
 }

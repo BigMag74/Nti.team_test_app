@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
@@ -33,21 +34,26 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.ntiteamtestapp.R
 import com.example.ntiteamtestapp.domain.model.Product
 import com.example.ntiteamtestapp.presentation.theme.GrayBg
+import com.example.ntiteamtestapp.presentation.theme.GrayText
 
 @Composable
 fun ProductLazyColumn(productsPriceCount: MutableIntState,
-                      products: List<Product>) {
+                      products: List<Product>,
+                      viewModel: MainScreenViewModel,
+                      state: LazyGridState) {
     LazyVerticalGrid(
         modifier = Modifier.padding(PaddingValues(horizontal = 4.dp)),
+        state = state,
         columns = GridCells.Fixed(2)
     ) {
         items(products) { product ->
             val productCount = rememberSaveable {
-                mutableIntStateOf(0)
+                mutableIntStateOf(product.productsInCart)
             }
             val oldPrice = remember {
                 mutableStateOf(product.priceOld)
@@ -59,7 +65,7 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
                     .clip(RoundedCornerShape(8.dp))
                     .background(GrayBg)
             ) {
-                if (product?.tagIds?.isNotEmpty() == true) {
+                if (product.tagIds.isNotEmpty()) {
                     LazyRow {
                         items(product.tagIds) { tag ->
                             when (tag) {
@@ -105,13 +111,15 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
                     )
                     Text(
                         text = product.name,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.padding(PaddingValues(horizontal = 8.dp))
                     )
                     Row(modifier = Modifier.padding(PaddingValues(horizontal = 8.dp))) {
-                        Text(text = product.measure.toString())
-                        Text(text = " " + product.measureUnit)
+                        Text(text = product.measure.toString(), color = GrayText)
+                        Text(text = " " + product.measureUnit, color = GrayText)
                     }
-                    if (productCount.intValue == 0) {
+                    if (product.productsInCart == 0) {
                         Button(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -124,24 +132,26 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
                             onClick = {
                                 productCount.intValue++
                                 productsPriceCount.intValue += product.priceCurrent
+                                product.productsInCart++
+                                viewModel.addProductToDB(product)
                             },
                         ) {
                             if (oldPrice.value == null) {
                                 Text(
-                                    text = product.priceCurrent.toString() + " ₽",
+                                    text = (product.priceCurrent / 100).toString() + " ₽",
                                     color = Color.Black
                                 )
                             } else {
                                 Row {
                                     Text(
-                                        text = product.priceCurrent.toString() + " ₽",
+                                        text = (product.priceCurrent / 100).toString() + " ₽",
                                         color = Color.Black
                                     )
                                     Spacer(modifier = Modifier.padding(4.dp))
                                     Text(
                                         textDecoration = TextDecoration.LineThrough,
-                                        text = product.priceOld.toString() + " ₽",
-                                        color = Color.Black
+                                        text = (product.priceOld?.div(100)).toString() + " ₽",
+                                        color = GrayText
                                     )
                                 }
                             }
@@ -164,7 +174,9 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
                                    shape = RoundedCornerShape(8.dp),
                                    onClick = {
                                        productCount.intValue--
+                                       product.productsInCart--
                                        productsPriceCount.intValue -= product.priceCurrent
+                                       viewModel.deleteProductFromDB(product)
                                    }) {
                                 Image(
                                     painter = painterResource(R.drawable.ic_minus),
@@ -172,7 +184,7 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
                                 )
 
                             }
-                            Text(text = productCount.intValue.toString())
+                            Text(text = product.productsInCart.toString())
                             Button(modifier = Modifier
                                 .size(40.dp)
                                 .aspectRatio(1f),
@@ -182,7 +194,9 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
                                    shape = RoundedCornerShape(8.dp),
                                    onClick = {
                                        productCount.intValue++
+                                       product.productsInCart++
                                        productsPriceCount.intValue += product.priceCurrent
+                                       viewModel.addProductToDB(product)
                                    }) {
                                 Image(
                                     painter = painterResource(R.drawable.ic_plus),

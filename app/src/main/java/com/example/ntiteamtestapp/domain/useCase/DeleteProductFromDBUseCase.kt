@@ -2,7 +2,7 @@ package com.example.ntiteamtestapp.domain.useCase
 
 import com.example.ntiteamtestapp.domain.model.Product
 
-interface AddProductsToDBUseCase {
+interface DeleteProductFromDBUseCase {
 
-    suspend fun execute(products: List<Product>)
+    suspend fun execute(product: Product)
 }

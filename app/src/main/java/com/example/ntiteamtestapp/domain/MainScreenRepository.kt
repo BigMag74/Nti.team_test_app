@@ -10,9 +10,11 @@ interface MainScreenRepository {
 
     fun getCategories(): Flow<Pair<List<Category>?, ErrorStatus?>>
 
-    fun getAllProductsUseCase(): Flow<Pair<List<Product>?, ErrorStatus?>>
+    fun getAllProducts(): Flow<Pair<List<Product>?, ErrorStatus?>>
 
-    fun getProductsByCategoryId(categoryId: Int)
+    suspend fun addProductsToDB(products: ProductEntity)
 
-    suspend fun addProductsToDBUseCase(products: List<ProductEntity>)
+    suspend fun deleteProductFromDB(product: ProductEntity)
+
+    suspend fun deleteAllProductsFromDB()
 }

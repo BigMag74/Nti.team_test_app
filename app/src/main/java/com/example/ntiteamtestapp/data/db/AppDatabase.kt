@@ -9,5 +9,5 @@ import androidx.room.RoomDatabase
 )
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun productDao(): ProductDao
+    abstract fun cartDao(): CartDao
 }
