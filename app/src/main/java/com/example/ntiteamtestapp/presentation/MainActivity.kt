@@ -27,12 +27,15 @@ import com.example.ntiteamtestapp.R
 import com.example.ntiteamtestapp.domain.model.ProductCard
 import com.example.ntiteamtestapp.presentation.theme.NtiteamTestAppTheme
 import com.example.ntiteamtestapp.presentation.theme.Orange
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
 
+    private val viewModel by viewModel<MainScreenViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val categories = viewModel.categories.value
             NtiteamTestAppTheme {
                 val productsPriceCount = remember {
                     mutableIntStateOf(0)
@@ -77,7 +80,6 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-
             }
         }
     }
@@ -89,12 +91,12 @@ val products = listOf(
     product, product.copy(priceOld = null, tagIds = listOf(4)), product.copy(tagIds = listOf()), product, product
 )
 
-val categories = listOf(
-    "Роллы",
-    "Сяки мяки",
-    "Бургеры",
-    "Свинина",
-    "Говядина",
-    "Филадельфия",
-    "Еще что то"
-)
+//val categories = listOf(
+//    "Роллы",
+//    "Сяки мяки",
+//    "Бургеры",
+//    "Свинина",
+//    "Говядина",
+//    "Филадельфия",
+//    "Еще что то"
+//)
