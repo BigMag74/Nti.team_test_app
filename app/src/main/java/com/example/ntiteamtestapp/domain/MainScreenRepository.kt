@@ -1,5 +1,6 @@
 package com.example.ntiteamtestapp.domain
 
+import com.example.ntiteamtestapp.data.db.ProductEntity
 import com.example.ntiteamtestapp.domain.model.Category
 import com.example.ntiteamtestapp.domain.model.ErrorStatus
 import com.example.ntiteamtestapp.domain.model.Product
@@ -12,4 +13,6 @@ interface MainScreenRepository {
     fun getAllProductsUseCase(): Flow<Pair<List<Product>?, ErrorStatus?>>
 
     fun getProductsByCategoryId(categoryId: Int)
+
+    suspend fun addProductsToDBUseCase(products: List<ProductEntity>)
 }

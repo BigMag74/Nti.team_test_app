@@ -24,5 +24,5 @@ data class Product(
     val fatsPer100Grams: Float,
     @SerializedName("carbohydrates_per_100_grams")
     val carbohydratesPer100Grams: Float,
-    val tagIds: List<Int>?,
+    val tagIds: List<Int>,
 )

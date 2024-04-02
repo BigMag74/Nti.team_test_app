@@ -1,5 +1,7 @@
 package com.example.ntiteamtestapp.data
 
+import com.example.ntiteamtestapp.data.db.AppDatabase
+import com.example.ntiteamtestapp.data.db.ProductEntity
 import com.example.ntiteamtestapp.data.dto.CategoriesRequest
 import com.example.ntiteamtestapp.data.dto.CategoriesResponse
 import com.example.ntiteamtestapp.data.dto.ProductsRequest
@@ -11,7 +13,10 @@ import com.example.ntiteamtestapp.domain.model.Product
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class MainScreenRepositoryImpl(private val networkClient: NetworkClient) : MainScreenRepository {
+class MainScreenRepositoryImpl(
+    private val networkClient: NetworkClient,
+    private val appDatabase: AppDatabase,
+) : MainScreenRepository {
 
     override fun getCategories(): Flow<Pair<List<Category>?, ErrorStatus?>> = flow {
         val response = networkClient.doRequest(CategoriesRequest())
@@ -33,5 +38,9 @@ class MainScreenRepositoryImpl(private val networkClient: NetworkClient) : MainS
 
     override fun getProductsByCategoryId(categoryId: Int) {
         //TODO("Not yet implemented")
+    }
+
+    override suspend fun addProductsToDBUseCase(products: List<ProductEntity>) {
+        appDatabase.productDao().insertProducts(products)
     }
 }

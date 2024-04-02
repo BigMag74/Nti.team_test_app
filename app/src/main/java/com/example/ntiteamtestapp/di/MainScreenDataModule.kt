@@ -1,6 +1,8 @@
 package com.example.ntiteamtestapp.di
 
+import androidx.room.Room
 import com.example.ntiteamtestapp.data.NetworkClient
+import com.example.ntiteamtestapp.data.db.AppDatabase
 import com.example.ntiteamtestapp.data.network.FoodiesApi
 import com.example.ntiteamtestapp.data.network.FoodiesRetrofitNetworkClient
 import com.google.gson.Gson
@@ -22,4 +24,9 @@ val mainScreenDatamodule = module {
 
     single<NetworkClient> { FoodiesRetrofitNetworkClient(get(), androidContext()) }
 
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .fallbackToDestructiveMigration()
+            .build()
+    }
 }
