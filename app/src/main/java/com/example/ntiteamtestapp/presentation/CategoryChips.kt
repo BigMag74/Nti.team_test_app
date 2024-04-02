@@ -1,6 +1,5 @@
-package com.example.ntiteamtestapp
+package com.example.ntiteamtestapp.presentation
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,11 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
+import com.example.ntiteamtestapp.presentation.theme.Orange
 
 @Composable
 fun CategoryChips(
     categories: List<String>,
-    context: Context,
     onCategoryClick: (String) -> Unit,
 ) {
     val collectionTabs = categories
@@ -36,13 +35,11 @@ fun CategoryChips(
                 Tab(
                     modifier = if (index == pagerPage.intValue) {
                         Modifier.background(
-                            color = Color(
-                                context.getColor(R.color.orange)
-                            ),
+                            color = Orange,
                             shape = RoundedCornerShape(8.dp)
                         )
                     } else {
-                        Modifier.background(Color.Transparent, shape = RoundedCornerShape(10.dp))
+                        Modifier.background(Color.Transparent, shape = RoundedCornerShape(8.dp))
                     },
                     onClick = { pagerPage.intValue = index
                               onCategoryClick(tab)},

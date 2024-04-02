@@ -1,4 +1,4 @@
-package com.example.ntiteamtestapp.ui.theme
+package com.example.ntiteamtestapp.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
