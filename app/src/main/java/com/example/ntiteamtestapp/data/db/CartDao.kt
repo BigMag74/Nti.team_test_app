@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CartDao {
@@ -15,6 +16,12 @@ interface CartDao {
     @Delete
     suspend fun deleteProduct(productEntity: ProductEntity)
 
-    @Query("SELECT * FROM products_table WHERE id = :productId")
+    @Query("DELETE FROM productentity")
+    suspend fun deleteAll()
+
+    @Query("SELECT * FROM productentity WHERE id = :productId")
     suspend fun getProductById(productId: Int): ProductEntity
+
+    @Query("SELECT * FROM productentity")
+    fun getAllProducts(): Flow<List<ProductEntity>>
 }

@@ -16,6 +16,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -30,9 +31,8 @@ import com.example.ntiteamtestapp.presentation.RootActivity.Companion.PRODUCT_IN
 import com.example.ntiteamtestapp.presentation.theme.Orange
 
 @Composable
-fun MainScreen(viewModel: MainScreenViewModel, navController: NavController) {
+fun MainScreen(viewModel: MainScreenViewModel, navController: NavController, products: MutableState<List<Product>>) {
     val categories = viewModel.categories.value
-    val products = viewModel.products.value
     val currentCategoryId = viewModel.firstCategoryId
     val lazyGridState = LazyGridState()
     val productsPriceCount = rememberSaveable {
@@ -61,7 +61,7 @@ fun MainScreen(viewModel: MainScreenViewModel, navController: NavController) {
             ProductLazyColumn(
                 productsPriceCount = productsPriceCount,
                 products =
-                getProductsByCategoryId(products, currentCategoryId.value),
+                getProductsByCategoryId(products.value, currentCategoryId.value),
                 viewModel,
                 lazyGridState,
             ) {

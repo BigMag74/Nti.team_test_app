@@ -16,12 +16,13 @@ class RootActivity : ComponentActivity() {
     private val viewModel by viewModel<MainScreenViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val products = viewModel.products
         setContent {
             val navController = rememberNavController()
             NtiteamTestAppTheme {
                 NavHost(navController = navController, startDestination = MAIN_SCREEN) {
                     composable(MAIN_SCREEN) {
-                        MainScreen(viewModel = viewModel, navController)
+                        MainScreen(viewModel = viewModel, navController, products)
                     }
                     composable("$PRODUCT_INFORMATION_SCREEN/{productId}",
                                arguments = listOf(
@@ -29,19 +30,27 @@ class RootActivity : ComponentActivity() {
                                        type = NavType.IntType
                                    }
                                )) {
-                        ProductInformationScreen(it.arguments?.getInt("productId"))
+                        it.arguments?.getInt("productId")?.let { it1 ->
+                            ProductInformationScreen(
+                                navController = navController,
+                                viewModel = viewModel,
+                                productId = it1,
+                                products = products
+                            )
+                        }
                     }
                     composable(CART_SCREEN) {
-                        CartScreen()
+                        CartScreen(viewModel)
                     }
                 }
             }
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.deleteAllProductsFromDBUseCase()
+    override fun onStop() {
+        super.onStop()
+        viewModel.deleteAllProductsFromDB()
+        finish()
     }
 
     companion object {

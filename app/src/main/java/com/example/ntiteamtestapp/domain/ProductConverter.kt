@@ -22,7 +22,7 @@ class ProductConverter {
             product.proteinsPer100Grams,
             product.fatsPer100Grams,
             product.carbohydratesPer100Grams,
-            product.tagIds.joinToString(separator = ","),
+            product.tagIds.joinToString(separator = ""),
             product.productsInCart
         )
     }

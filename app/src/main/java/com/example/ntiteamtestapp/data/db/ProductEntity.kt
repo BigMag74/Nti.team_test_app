@@ -3,7 +3,7 @@ package com.example.ntiteamtestapp.data.db
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity("products_table")
+@Entity
 data class ProductEntity(
     @PrimaryKey
     val id: Int,

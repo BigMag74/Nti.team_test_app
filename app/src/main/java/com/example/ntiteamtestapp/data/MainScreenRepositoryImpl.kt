@@ -41,10 +41,17 @@ class MainScreenRepositoryImpl(
     }
 
     override suspend fun deleteProductFromDB(product: ProductEntity) {
-        appDatabase.cartDao().deleteProduct(product)
+        if (product.count == 0) {
+            appDatabase.cartDao().deleteProduct(product)
+        } else
+            addProductsToDB(product)
     }
 
     override suspend fun deleteAllProductsFromDB() {
-        appDatabase.clearAllTables()
+        appDatabase.cartDao().deleteAll()
+    }
+
+    override suspend fun getProductsFromDB(): Flow<List<ProductEntity>> {
+        return appDatabase.cartDao().getAllProducts()
     }
 }

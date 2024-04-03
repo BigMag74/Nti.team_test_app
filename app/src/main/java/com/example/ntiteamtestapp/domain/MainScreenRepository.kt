@@ -17,4 +17,6 @@ interface MainScreenRepository {
     suspend fun deleteProductFromDB(product: ProductEntity)
 
     suspend fun deleteAllProductsFromDB()
+
+    suspend fun getProductsFromDB(): Flow<List<ProductEntity>>
 }
