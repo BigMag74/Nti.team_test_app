@@ -50,8 +50,4 @@ class MainScreenRepositoryImpl(
     override suspend fun deleteAllProductsFromDB() {
         appDatabase.cartDao().deleteAll()
     }
-
-    override suspend fun getProductsFromDB(): Flow<List<ProductEntity>> {
-        return appDatabase.cartDao().getAllProducts()
-    }
 }

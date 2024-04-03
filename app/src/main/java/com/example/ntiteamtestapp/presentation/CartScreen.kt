@@ -51,7 +51,6 @@ fun CartScreen(
     viewModel: MainScreenViewModel,
     products: MutableState<List<Product>>,
 ) {
-    viewModel.getProductsFromDB()
     val cartProducts = getCartProducts(products.value)
     val productsPriceCount = rememberSaveable {
         mutableIntStateOf(culcProductPriceCount(cartProducts))
@@ -180,17 +179,18 @@ fun CartScreen(
                         .fillMaxWidth()
                 )
             }
-            item {
-                Button(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                       elevation = ButtonDefaults.elevatedButtonElevation(4.dp),
-                       colors = ButtonDefaults.buttonColors(Orange),
-                       shape = RoundedCornerShape(8.dp),
-                       contentPadding = PaddingValues(0.dp),
-                       onClick = { /*TODO*/ }) {
-                    Text(text = "Заказать за ${productsPriceCount.intValue / 100} ₽")
-
+            if (productsPriceCount.intValue > 0) {
+                item {
+                    Button(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                           elevation = ButtonDefaults.elevatedButtonElevation(4.dp),
+                           colors = ButtonDefaults.buttonColors(Orange),
+                           shape = RoundedCornerShape(8.dp),
+                           contentPadding = PaddingValues(0.dp),
+                           onClick = { /*TODO*/ }) {
+                        Text(text = "Заказать за ${productsPriceCount.intValue / 100} ₽")
+                    }
                 }
             }
         }

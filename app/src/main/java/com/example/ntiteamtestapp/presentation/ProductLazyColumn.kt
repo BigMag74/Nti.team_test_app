@@ -52,6 +52,7 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
         state = state,
         columns = GridCells.Fixed(2)
     ) {
+        productsPriceCount.intValue = culcProductPriceCount(products)
         items(products) { product ->
             val oldPrice = remember {
                 mutableStateOf(product.priceOld)
@@ -207,4 +208,9 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
         item { Spacer(modifier = Modifier.height(56.dp)) }
         item { Spacer(modifier = Modifier.height(56.dp)) }
     }
+}
+private fun culcProductPriceCount(products: List<Product>): Int {
+    var res = 0
+    products.forEach { res += it.priceCurrent * it.productsInCart }
+    return res
 }

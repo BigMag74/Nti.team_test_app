@@ -84,4 +84,8 @@ dependencies {
 
     //Navigation
     implementation(libs.androidx.navigation.compose)
+
+    //Gif
+    implementation (libs.io.coil.kt.coil.compose)
+    implementation (libs.coil.gif)
 }

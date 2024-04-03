@@ -12,7 +12,6 @@ import com.example.ntiteamtestapp.domain.useCase.DeleteAllProductsFromDBUseCase
 import com.example.ntiteamtestapp.domain.useCase.DeleteProductFromDBUseCase
 import com.example.ntiteamtestapp.domain.useCase.GetAllProductsUseCase
 import com.example.ntiteamtestapp.domain.useCase.GetCategoriesUseCase
-import com.example.ntiteamtestapp.domain.useCase.GetProductsFromDBUseCase
 import kotlinx.coroutines.launch
 
 class MainScreenViewModel(
@@ -21,13 +20,11 @@ class MainScreenViewModel(
     private val addProductToDBUseCase: AddProductToDBUseCase,
     private val deleteProductFromDBUseCase: DeleteProductFromDBUseCase,
     private val deleteAllProductsFromDBUseCase: DeleteAllProductsFromDBUseCase,
-    private val getProductsFromDBUseCase: GetProductsFromDBUseCase,
 ) : ViewModel() {
 
     val categories: MutableState<List<Category>> = mutableStateOf(listOf())
     val products: MutableState<List<Product>> = mutableStateOf(listOf())
     val firstCategoryId: MutableState<Int> = mutableIntStateOf(0)
-    val productFromBD: MutableState<List<Product>> = mutableStateOf(listOf())
 
     init {
         viewModelScope.launch {
@@ -66,11 +63,4 @@ class MainScreenViewModel(
         }
     }
 
-    fun getProductsFromDB() {
-        viewModelScope.launch {
-            getProductsFromDBUseCase.execute().collect {
-                productFromBD.value = it
-            }
-        }
-    }
 }

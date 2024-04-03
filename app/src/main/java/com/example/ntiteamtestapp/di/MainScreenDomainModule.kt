@@ -10,11 +10,9 @@ import com.example.ntiteamtestapp.domain.useCase.impl.AddProductToDBUseCaseImpl
 import com.example.ntiteamtestapp.domain.useCase.GetAllProductsUseCase
 import com.example.ntiteamtestapp.domain.useCase.impl.GetAllProductsUseCaseImpl
 import com.example.ntiteamtestapp.domain.useCase.GetCategoriesUseCase
-import com.example.ntiteamtestapp.domain.useCase.GetProductsFromDBUseCase
 import com.example.ntiteamtestapp.domain.useCase.impl.DeleteAllProductsFromDBUseCaseImpl
 import com.example.ntiteamtestapp.domain.useCase.impl.DeleteProductFromDBUseCaseImpl
 import com.example.ntiteamtestapp.domain.useCase.impl.GetCategoriesUseCaseImpl
-import com.example.ntiteamtestapp.domain.useCase.impl.GetProductsFromDBUseCaseImpl
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
@@ -25,7 +23,6 @@ val mainScreenDomainModule = module {
     single<AddProductToDBUseCase> { AddProductToDBUseCaseImpl(get(), get()) }
     single<DeleteProductFromDBUseCase> { DeleteProductFromDBUseCaseImpl(get(), get()) }
     single<DeleteAllProductsFromDBUseCase> { DeleteAllProductsFromDBUseCaseImpl(get()) }
-    single<GetProductsFromDBUseCase> { GetProductsFromDBUseCaseImpl(get(), get()) }
     single<MainScreenRepository> { MainScreenRepositoryImpl(get(), get()) }
 
 }

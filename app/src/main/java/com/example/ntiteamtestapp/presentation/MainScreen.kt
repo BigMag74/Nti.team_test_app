@@ -40,49 +40,54 @@ fun MainScreen(viewModel: MainScreenViewModel, navController: NavController, pro
     }
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Color.White
+        color = if (categories.isEmpty()) Orange else Color.White,
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White),
-            verticalArrangement = Arrangement.Top
-        ) {
-            Image(
-                painter = painterResource(
-                    id = R.drawable.ic_logo
-                ),
-                contentDescription = "Logo",
-                modifier = Modifier.fillMaxWidth()
-            )
-            CategoryChips(categories = categories, lazyGridState) {
-                currentCategoryId.value = it
-            }
-            ProductLazyColumn(
-                productsPriceCount = productsPriceCount,
-                products = getProductsByCategoryId(products.value, currentCategoryId.value),
-                viewModel = viewModel,
-                state = lazyGridState,
-            ) {
-                navController.navigate("$PRODUCT_INFORMATION_SCREEN/$it")
-            }
-        }
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.Bottom
-        ) {
-            if (productsPriceCount.intValue > 0) {
-                Button(modifier = Modifier
+        if (categories.isEmpty()) {
+            GifImage()
+        } else {
+
+            Column(
+                modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
-                       elevation = ButtonDefaults.elevatedButtonElevation(4.dp),
-                       colors = ButtonDefaults.buttonColors(Orange),
-                       shape = RoundedCornerShape(8.dp),
-                       contentPadding = PaddingValues(0.dp),
-                       onClick = { navController.navigate(CART_SCREEN) }) {
-                    Image(painter = painterResource(R.drawable.ic_cart), contentDescription = "Корзина")
-                    Spacer(modifier = Modifier.padding(4.dp))
-                    Text(text = (productsPriceCount.intValue / 100).toString() + " ₽")
+                    .background(Color.White),
+                verticalArrangement = Arrangement.Top
+            ) {
+                Image(
+                    painter = painterResource(
+                        id = R.drawable.ic_logo
+                    ),
+                    contentDescription = "Logo",
+                    modifier = Modifier.fillMaxWidth()
+                )
+                CategoryChips(categories = categories, lazyGridState) {
+                    currentCategoryId.value = it
+                }
+                ProductLazyColumn(
+                    productsPriceCount = productsPriceCount,
+                    products = getProductsByCategoryId(products.value, currentCategoryId.value),
+                    viewModel = viewModel,
+                    state = lazyGridState,
+                ) {
+                    navController.navigate("$PRODUCT_INFORMATION_SCREEN/$it")
+                }
+            }
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.Bottom
+            ) {
+                if (productsPriceCount.intValue > 0) {
+                    Button(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                           elevation = ButtonDefaults.elevatedButtonElevation(4.dp),
+                           colors = ButtonDefaults.buttonColors(Orange),
+                           shape = RoundedCornerShape(8.dp),
+                           contentPadding = PaddingValues(0.dp),
+                           onClick = { navController.navigate(CART_SCREEN) }) {
+                        Image(painter = painterResource(R.drawable.ic_cart), contentDescription = "Корзина")
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        Text(text = (productsPriceCount.intValue / 100).toString() + " ₽")
+                    }
                 }
             }
         }

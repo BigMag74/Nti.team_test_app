@@ -163,6 +163,7 @@ fun ProductInformationScreen(
                shape = RoundedCornerShape(8.dp),
                contentPadding = PaddingValues(0.dp),
                onClick = {
+                   product.productsInCart++
                    viewModel.addProductToDB(product.copy(productsInCart = product.productsInCart + 1))
                    navController.navigate(RootActivity.CART_SCREEN)
                }) {
