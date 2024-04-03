@@ -60,10 +60,9 @@ fun MainScreen(viewModel: MainScreenViewModel, navController: NavController, pro
             }
             ProductLazyColumn(
                 productsPriceCount = productsPriceCount,
-                products =
-                getProductsByCategoryId(products.value, currentCategoryId.value),
-                viewModel,
-                lazyGridState,
+                products = getProductsByCategoryId(products.value, currentCategoryId.value),
+                viewModel = viewModel,
+                state = lazyGridState,
             ) {
                 navController.navigate("$PRODUCT_INFORMATION_SCREEN/$it")
             }

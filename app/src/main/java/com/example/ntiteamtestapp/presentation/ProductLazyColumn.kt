@@ -26,10 +26,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,9 +53,6 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
         columns = GridCells.Fixed(2)
     ) {
         items(products) { product ->
-            val productCount = rememberSaveable {
-                mutableIntStateOf(product.productsInCart)
-            }
             val oldPrice = remember {
                 mutableStateOf(product.priceOld)
             }
@@ -134,7 +129,6 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
                             contentPadding = PaddingValues(0.dp),
 
                             onClick = {
-                                productCount.intValue++
                                 productsPriceCount.intValue += product.priceCurrent
                                 product.productsInCart++
                                 viewModel.addProductToDB(product)
@@ -177,7 +171,6 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
                                    colors = ButtonDefaults.buttonColors(Color.White),
                                    shape = RoundedCornerShape(8.dp),
                                    onClick = {
-                                       productCount.intValue--
                                        product.productsInCart--
                                        productsPriceCount.intValue -= product.priceCurrent
                                        viewModel.deleteProductFromDB(product)
@@ -197,7 +190,6 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
                                    colors = ButtonDefaults.buttonColors(Color.White),
                                    shape = RoundedCornerShape(8.dp),
                                    onClick = {
-                                       productCount.intValue++
                                        product.productsInCart++
                                        productsPriceCount.intValue += product.priceCurrent
                                        viewModel.addProductToDB(product)

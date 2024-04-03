@@ -40,7 +40,11 @@ class RootActivity : ComponentActivity() {
                         }
                     }
                     composable(CART_SCREEN) {
-                        CartScreen(viewModel)
+                        CartScreen(
+                            navController = navController,
+                            viewModel = viewModel,
+                            products = products
+                        )
                     }
                 }
             }
