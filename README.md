@@ -1,6 +1,6 @@
 # Тестовое приложение для REQUEST Всероссийские Web-проекты
 
-Приложение для заказа еды использующее [тестовую версию API](https://anika1d.github.io/WorkTestServer)
+Приложение для заказа еды, использующее [тестовую версию API](https://anika1d.github.io/WorkTestServer)
 На данный момент реализованы три экрана: каталог товаров, карточка товара и корзина.
 
 ## Стек: Jetpack compose, Retrofit, Koin, Jetpack navigation, Coroutines + Flow, MVVM
