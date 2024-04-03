@@ -113,7 +113,10 @@ fun CartScreen(
                                 verticalArrangement = Arrangement.SpaceBetween
                             ) {
                                 // Название
-                                Text(text = product.name)
+                                Text(
+                                    modifier = Modifier.padding(top = 4.dp),
+                                    text = product.name
+                                )
                                 // Кнопки управления количеством товара
                                 Row(
                                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -165,7 +168,7 @@ fun CartScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(96.dp)
-                                .padding(bottom = 8.dp),
+                                .padding(bottom = 8.dp, end = 4.dp),
                             verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.End
                         ) {
                             // Цена товара
