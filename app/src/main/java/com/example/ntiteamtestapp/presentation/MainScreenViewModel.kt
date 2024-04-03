@@ -7,9 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ntiteamtestapp.domain.model.Category
 import com.example.ntiteamtestapp.domain.model.Product
-import com.example.ntiteamtestapp.domain.useCase.AddProductToDBUseCase
-import com.example.ntiteamtestapp.domain.useCase.DeleteAllProductsFromDBUseCase
-import com.example.ntiteamtestapp.domain.useCase.DeleteProductFromDBUseCase
 import com.example.ntiteamtestapp.domain.useCase.GetAllProductsUseCase
 import com.example.ntiteamtestapp.domain.useCase.GetCategoriesUseCase
 import kotlinx.coroutines.launch
@@ -17,9 +14,7 @@ import kotlinx.coroutines.launch
 class MainScreenViewModel(
     getCategoriesUseCase: GetCategoriesUseCase,
     getAllProductsUseCase: GetAllProductsUseCase,
-    private val addProductToDBUseCase: AddProductToDBUseCase,
-    private val deleteProductFromDBUseCase: DeleteProductFromDBUseCase,
-    private val deleteAllProductsFromDBUseCase: DeleteAllProductsFromDBUseCase,
+
 ) : ViewModel() {
 
     val categories: MutableState<List<Category>> = mutableStateOf(listOf())
@@ -45,22 +40,6 @@ class MainScreenViewModel(
             }
         }
     }
-    fun addProductToDB(product: Product) {
-        viewModelScope.launch {
-            addProductToDBUseCase.execute(product)
-        }
-    }
 
-    fun deleteProductFromDB(product: Product) {
-        viewModelScope.launch {
-            deleteProductFromDBUseCase.execute(product)
-        }
-    }
-
-    fun deleteAllProductsFromDB() {
-        viewModelScope.launch {
-            deleteAllProductsFromDBUseCase.execute()
-        }
-    }
 
 }

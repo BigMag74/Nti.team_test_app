@@ -1,4 +1,4 @@
-package com.example.ntiteamtestapp.presentation
+package com.example.ntiteamtestapp.presentation.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,6 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.ntiteamtestapp.R
 import com.example.ntiteamtestapp.domain.model.Product
+import com.example.ntiteamtestapp.presentation.composable.CategoryChips
+import com.example.ntiteamtestapp.presentation.composable.GifImage
+import com.example.ntiteamtestapp.presentation.MainScreenViewModel
+import com.example.ntiteamtestapp.presentation.composable.ProductLazyColumn
 import com.example.ntiteamtestapp.presentation.RootActivity.Companion.CART_SCREEN
 import com.example.ntiteamtestapp.presentation.RootActivity.Companion.PRODUCT_INFORMATION_SCREEN
 import com.example.ntiteamtestapp.presentation.theme.Orange
@@ -34,7 +38,11 @@ import com.example.ntiteamtestapp.presentation.theme.Orange
 fun MainScreen(viewModel: MainScreenViewModel, navController: NavController, products: MutableState<List<Product>>) {
     val categories = viewModel.categories.value
     val currentCategoryId = viewModel.firstCategoryId
+
+    // Передается для скролинга наверх при смене категории
     val lazyGridState = LazyGridState()
+
+    // Сумма в корзине
     val productsPriceCount = rememberSaveable {
         mutableIntStateOf(0)
     }
@@ -42,10 +50,13 @@ fun MainScreen(viewModel: MainScreenViewModel, navController: NavController, pro
         modifier = Modifier.fillMaxSize(),
         color = if (categories.isEmpty()) Orange else Color.White,
     ) {
+        // Анимированный Splashscreen
         if (categories.isEmpty()) {
             GifImage()
         } else {
-
+            // При переходе с другого экрана каждый раз пересчитываем общую сумму в корзине
+            productsPriceCount.intValue =
+                com.example.ntiteamtestapp.presentation.composable.culcProductPriceCount(products.value)
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -59,23 +70,26 @@ fun MainScreen(viewModel: MainScreenViewModel, navController: NavController, pro
                     contentDescription = "Logo",
                     modifier = Modifier.fillMaxWidth()
                 )
+                // Верхниче Чипсы с категероиями
                 CategoryChips(categories = categories, lazyGridState) {
                     currentCategoryId.value = it
                 }
+                // LazyVerticalGrid с карточками товаров
+                // Передаем только те товары которые приннадлежат данной категории
                 ProductLazyColumn(
                     productsPriceCount = productsPriceCount,
                     products = getProductsByCategoryId(products.value, currentCategoryId.value),
-                    viewModel = viewModel,
                     state = lazyGridState,
                 ) {
                     navController.navigate("$PRODUCT_INFORMATION_SCREEN/$it")
                 }
             }
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.Bottom
-            ) {
-                if (productsPriceCount.intValue > 0) {
+            // Кнопка корзины
+            if (productsPriceCount.intValue > 0) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.Bottom
+                ) {
                     Button(modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),

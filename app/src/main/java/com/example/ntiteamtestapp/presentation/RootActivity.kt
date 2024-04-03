@@ -8,6 +8,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.ntiteamtestapp.presentation.screens.CartScreen
+import com.example.ntiteamtestapp.presentation.screens.MainScreen
+import com.example.ntiteamtestapp.presentation.screens.ProductInformationScreen
 import com.example.ntiteamtestapp.presentation.theme.NtiteamTestAppTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -16,14 +19,17 @@ class RootActivity : ComponentActivity() {
     private val viewModel by viewModel<MainScreenViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Общий список продуктов, который будет передаваться в каждый экран
         val products = viewModel.products
         setContent {
             val navController = rememberNavController()
             NtiteamTestAppTheme {
+                // NavGraph
                 NavHost(navController = navController, startDestination = MAIN_SCREEN) {
                     composable(MAIN_SCREEN) {
                         MainScreen(viewModel = viewModel, navController, products)
                     }
+                    // Передача productId в экран "Карточка товара"
                     composable("$PRODUCT_INFORMATION_SCREEN/{productId}",
                                arguments = listOf(
                                    navArgument(name = "productId") {
@@ -33,7 +39,6 @@ class RootActivity : ComponentActivity() {
                         it.arguments?.getInt("productId")?.let { it1 ->
                             ProductInformationScreen(
                                 navController = navController,
-                                viewModel = viewModel,
                                 productId = it1,
                                 products = products
                             )
@@ -42,19 +47,12 @@ class RootActivity : ComponentActivity() {
                     composable(CART_SCREEN) {
                         CartScreen(
                             navController = navController,
-                            viewModel = viewModel,
                             products = products
                         )
                     }
                 }
             }
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        viewModel.deleteAllProductsFromDB()
-        finish()
     }
 
     companion object {

@@ -1,4 +1,4 @@
-package com.example.ntiteamtestapp.presentation
+package com.example.ntiteamtestapp.presentation.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
@@ -24,9 +24,13 @@ import com.example.ntiteamtestapp.presentation.theme.Orange
 fun CategoryChips(
     categories: List<Category>,
     lazyGridState: LazyGridState,
+
+    // Передаем id Категории на которую кликнули для выбора продуктов из этой категории
     onCategoryClick: (Int) -> Unit,
 ) {
     val pagerPage = rememberSaveable { mutableIntStateOf(0) }
+
+    // При клике на категорию скролим наверх
     val isClicked = remember { mutableStateOf(false) }
 
     ScrollableTabRow(

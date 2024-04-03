@@ -1,4 +1,4 @@
-package com.example.ntiteamtestapp.presentation
+package com.example.ntiteamtestapp.presentation.composable
 
 import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.Image

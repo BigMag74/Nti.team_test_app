@@ -1,11 +1,10 @@
 package com.example.ntiteamtestapp.data
 
-import com.example.ntiteamtestapp.data.db.AppDatabase
-import com.example.ntiteamtestapp.data.db.ProductEntity
 import com.example.ntiteamtestapp.data.dto.CategoriesRequest
 import com.example.ntiteamtestapp.data.dto.CategoriesResponse
 import com.example.ntiteamtestapp.data.dto.ProductsRequest
 import com.example.ntiteamtestapp.data.dto.ProductsResponse
+import com.example.ntiteamtestapp.data.network.NetworkClient
 import com.example.ntiteamtestapp.domain.MainScreenRepository
 import com.example.ntiteamtestapp.domain.model.Category
 import com.example.ntiteamtestapp.domain.model.ErrorStatus
@@ -15,7 +14,6 @@ import kotlinx.coroutines.flow.flow
 
 class MainScreenRepositoryImpl(
     private val networkClient: NetworkClient,
-    private val appDatabase: AppDatabase,
 ) : MainScreenRepository {
 
     override fun getCategories(): Flow<Pair<List<Category>?, ErrorStatus?>> = flow {
@@ -34,20 +32,5 @@ class MainScreenRepositoryImpl(
             200 -> emit(Pair((response as ProductsResponse).results, null))
             else -> emit(Pair(null, ErrorStatus.ERROR_OCCURRED))
         }
-    }
-
-    override suspend fun addProductsToDB(productEntity: ProductEntity) {
-        appDatabase.cartDao().insertProduct(productEntity)
-    }
-
-    override suspend fun deleteProductFromDB(product: ProductEntity) {
-        if (product.count == 0) {
-            appDatabase.cartDao().deleteProduct(product)
-        } else
-            addProductsToDB(product)
-    }
-
-    override suspend fun deleteAllProductsFromDB() {
-        appDatabase.cartDao().deleteAll()
     }
 }

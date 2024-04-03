@@ -1,4 +1,4 @@
-package com.example.ntiteamtestapp.presentation
+package com.example.ntiteamtestapp.presentation.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,13 +31,13 @@ import com.example.ntiteamtestapp.R
 import com.example.ntiteamtestapp.domain.model.Product
 import com.example.ntiteamtestapp.presentation.theme.Orange
 import androidx.compose.ui.unit.sp
+import com.example.ntiteamtestapp.presentation.RootActivity
 import com.example.ntiteamtestapp.presentation.theme.GrayBg
 import com.example.ntiteamtestapp.presentation.theme.GrayText
 
 @Composable
 fun ProductInformationScreen(
     navController: NavController,
-    viewModel: MainScreenViewModel,
     products: MutableState<List<Product>>,
     productId: Int) {
     val product: Product = findProductById(products.value, productId)!!
@@ -48,6 +48,7 @@ fun ProductInformationScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
+        // Кнопка назад
         Button(modifier = Modifier
             .padding(8.dp)
             .size(48.dp),
@@ -60,6 +61,7 @@ fun ProductInformationScreen(
                 tint = Color.Black
             )
         }
+        // Фото
         Image(
             painter = painterResource(id = R.drawable.placeholder_product),
             contentDescription = "Продукт",
@@ -67,18 +69,21 @@ fun ProductInformationScreen(
                 .fillMaxWidth()
                 .aspectRatio(1f)
         )
-
+        // Название
         Text(text = product.name, fontSize = 34.sp, modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp))
+        // Описание
         Text(
             text = product.description, color = GrayText,
             modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 16.dp)
         )
+        // Разделитель
         Spacer(
             modifier = Modifier
                 .height(2.dp)
                 .background(GrayBg)
                 .fillMaxWidth()
         )
+        // Вес
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -94,6 +99,7 @@ fun ProductInformationScreen(
                 .background(GrayBg)
                 .fillMaxWidth()
         )
+        // Энергетическая ценность
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -109,6 +115,7 @@ fun ProductInformationScreen(
                 .background(GrayBg)
                 .fillMaxWidth()
         )
+        // Белки
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -124,6 +131,7 @@ fun ProductInformationScreen(
                 .background(GrayBg)
                 .fillMaxWidth()
         )
+        // Жиры
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -139,6 +147,7 @@ fun ProductInformationScreen(
                 .background(GrayBg)
                 .fillMaxWidth()
         )
+        // Углеводы
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -155,6 +164,7 @@ fun ProductInformationScreen(
                 .fillMaxWidth()
         )
 
+        // Кнопка перехода в корзину
         Button(modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
@@ -164,7 +174,6 @@ fun ProductInformationScreen(
                contentPadding = PaddingValues(0.dp),
                onClick = {
                    product.productsInCart++
-                   viewModel.addProductToDB(product.copy(productsInCart = product.productsInCart + 1))
                    navController.navigate(RootActivity.CART_SCREEN)
                }) {
             Text(text = ("В корзину за ${product.priceCurrent.div(100)} ₽"))

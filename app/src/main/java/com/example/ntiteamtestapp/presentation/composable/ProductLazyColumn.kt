@@ -1,4 +1,4 @@
-package com.example.ntiteamtestapp.presentation
+package com.example.ntiteamtestapp.presentation.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,8 +26,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,20 +42,15 @@ import com.example.ntiteamtestapp.presentation.theme.GrayText
 @Composable
 fun ProductLazyColumn(productsPriceCount: MutableIntState,
                       products: List<Product>,
-                      viewModel: MainScreenViewModel,
                       state: LazyGridState,
+    // Передаем id продукта для пробрасывания его на экран "карточка товара"
                       onClick: (Int) -> Unit) {
     LazyVerticalGrid(
         modifier = Modifier.padding(PaddingValues(horizontal = 4.dp)),
         state = state,
         columns = GridCells.Fixed(2)
     ) {
-        productsPriceCount.intValue = culcProductPriceCount(products)
         items(products) { product ->
-            val oldPrice = remember {
-                mutableStateOf(product.priceOld)
-            }
-
             Box(
                 modifier = Modifier
                     .padding(4.dp)
@@ -65,6 +58,7 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
                     .background(GrayBg)
                     .clickable { onClick(product.id) }
             ) {
+                // Просталвяем теги
                 if (product.tagIds.isNotEmpty()) {
                     LazyRow {
                         items(product.tagIds) { tag ->
@@ -104,21 +98,25 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
                 }
 
                 Column {
+                    // Фото товара. Пока с сервера ничего не приходит, поэтому поставил плейсхолдер
                     Image(
                         modifier = Modifier.aspectRatio(1f),
                         painter = painterResource(id = R.drawable.placeholder_product),
                         contentDescription = "Product image"
                     )
+                    // Название
                     Text(
                         text = product.name,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.padding(PaddingValues(horizontal = 8.dp))
                     )
+                    // Грамовка
                     Row(modifier = Modifier.padding(PaddingValues(horizontal = 8.dp))) {
                         Text(text = product.measure.toString(), color = GrayText)
                         Text(text = " " + product.measureUnit, color = GrayText)
                     }
+                    //Кнопка добавить с ценой товара
                     if (product.productsInCart == 0) {
                         Button(
                             modifier = Modifier
@@ -132,30 +130,26 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
                             onClick = {
                                 productsPriceCount.intValue += product.priceCurrent
                                 product.productsInCart++
-                                viewModel.addProductToDB(product)
                             },
                         ) {
-                            if (oldPrice.value == null) {
+                            // Цена
+                            Row {
                                 Text(
                                     text = (product.priceCurrent / 100).toString() + " ₽",
                                     color = Color.Black
                                 )
-                            } else {
-                                Row {
-                                    Text(
-                                        text = (product.priceCurrent / 100).toString() + " ₽",
-                                        color = Color.Black
-                                    )
+                                // Проставляем старую цену если она есть
+                                if (product.priceOld != null) {
                                     Spacer(modifier = Modifier.padding(4.dp))
                                     Text(
                                         textDecoration = TextDecoration.LineThrough,
-                                        text = (product.priceOld?.div(100)).toString() + " ₽",
+                                        text = (product.priceOld.div(100)).toString() + " ₽",
                                         color = GrayText
                                     )
                                 }
                             }
-
                         }
+                        // Кнопки регулирование количества товара в корзине
                     } else {
                         Row(
                             modifier = Modifier
@@ -174,7 +168,6 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
                                    onClick = {
                                        product.productsInCart--
                                        productsPriceCount.intValue -= product.priceCurrent
-                                       viewModel.deleteProductFromDB(product)
                                    }) {
                                 Image(
                                     painter = painterResource(R.drawable.ic_minus),
@@ -193,7 +186,6 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
                                    onClick = {
                                        product.productsInCart++
                                        productsPriceCount.intValue += product.priceCurrent
-                                       viewModel.addProductToDB(product)
                                    }) {
                                 Image(
                                     painter = painterResource(R.drawable.ic_plus),
@@ -205,11 +197,13 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
                 }
             }
         }
+        // пустое пространство для того, чтобы кнопка корзины не перекрывала товары
         item { Spacer(modifier = Modifier.height(56.dp)) }
         item { Spacer(modifier = Modifier.height(56.dp)) }
     }
 }
-private fun culcProductPriceCount(products: List<Product>): Int {
+
+fun culcProductPriceCount(products: List<Product>): Int {
     var res = 0
     products.forEach { res += it.priceCurrent * it.productsInCart }
     return res

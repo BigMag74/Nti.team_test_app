@@ -74,11 +74,6 @@ dependencies {
     implementation (libs.converter.gson)
     implementation (libs.gson)
 
-    //Room
-    implementation(libs.androidx.room.runtime)
-    kapt("androidx.room:room-compiler:2.6.1")
-    implementation(libs.androidx.room.ktx)
-
     //Coroutines
     implementation(libs.kotlinx.coroutines.android)
 
