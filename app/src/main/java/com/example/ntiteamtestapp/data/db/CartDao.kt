@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 @Dao
 interface CartDao {
@@ -14,4 +15,6 @@ interface CartDao {
     @Delete
     suspend fun deleteProduct(productEntity: ProductEntity)
 
+    @Query("SELECT * FROM products_table WHERE id = :productId")
+    suspend fun getProductById(productId: Int): ProductEntity
 }

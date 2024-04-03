@@ -2,6 +2,7 @@ package com.example.ntiteamtestapp.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,7 +46,8 @@ import com.example.ntiteamtestapp.presentation.theme.GrayText
 fun ProductLazyColumn(productsPriceCount: MutableIntState,
                       products: List<Product>,
                       viewModel: MainScreenViewModel,
-                      state: LazyGridState) {
+                      state: LazyGridState,
+                      onClick: (Int) -> Unit) {
     LazyVerticalGrid(
         modifier = Modifier.padding(PaddingValues(horizontal = 4.dp)),
         state = state,
@@ -64,6 +66,7 @@ fun ProductLazyColumn(productsPriceCount: MutableIntState,
                     .padding(4.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .background(GrayBg)
+                    .clickable { onClick(product.id) }
             ) {
                 if (product.tagIds.isNotEmpty()) {
                     LazyRow {

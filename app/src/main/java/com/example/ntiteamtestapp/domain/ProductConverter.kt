@@ -23,6 +23,7 @@ class ProductConverter {
             product.fatsPer100Grams,
             product.carbohydratesPer100Grams,
             product.tagIds.joinToString(separator = ","),
+            product.productsInCart
         )
     }
 
@@ -43,6 +44,7 @@ class ProductConverter {
             productEntity.fatsPer100Grams,
             productEntity.carbohydratesPer100Grams,
             productEntity.tagIds.map { it.digitToInt() },
+            productEntity.count
         )
     }
 }

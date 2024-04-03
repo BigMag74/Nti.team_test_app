@@ -36,8 +36,8 @@ class MainScreenRepositoryImpl(
         }
     }
 
-    override suspend fun addProductsToDB(product: ProductEntity) {
-        appDatabase.cartDao().insertProduct(product)
+    override suspend fun addProductsToDB(productEntity: ProductEntity) {
+        appDatabase.cartDao().insertProduct(productEntity)
     }
 
     override suspend fun deleteProductFromDB(product: ProductEntity) {

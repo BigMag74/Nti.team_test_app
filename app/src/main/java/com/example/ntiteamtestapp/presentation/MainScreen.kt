@@ -17,7 +17,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.ntiteamtestapp.R
 import com.example.ntiteamtestapp.domain.model.Product
+import com.example.ntiteamtestapp.presentation.RootActivity.Companion.CART_SCREEN
+import com.example.ntiteamtestapp.presentation.RootActivity.Companion.PRODUCT_INFORMATION_SCREEN
 import com.example.ntiteamtestapp.presentation.theme.Orange
 
 @Composable
@@ -33,7 +35,7 @@ fun MainScreen(viewModel: MainScreenViewModel, navController: NavController) {
     val products = viewModel.products.value
     val currentCategoryId = viewModel.firstCategoryId
     val lazyGridState = LazyGridState()
-    val productsPriceCount = remember {
+    val productsPriceCount = rememberSaveable {
         mutableIntStateOf(0)
     }
     Surface(
@@ -62,7 +64,9 @@ fun MainScreen(viewModel: MainScreenViewModel, navController: NavController) {
                 getProductsByCategoryId(products, currentCategoryId.value),
                 viewModel,
                 lazyGridState,
-            )
+            ) {
+                navController.navigate("$PRODUCT_INFORMATION_SCREEN/$it")
+            }
         }
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -76,7 +80,7 @@ fun MainScreen(viewModel: MainScreenViewModel, navController: NavController) {
                        colors = ButtonDefaults.buttonColors(Orange),
                        shape = RoundedCornerShape(8.dp),
                        contentPadding = PaddingValues(0.dp),
-                       onClick = { /*TODO*/ }) {
+                       onClick = { navController.navigate(CART_SCREEN) }) {
                     Image(painter = painterResource(R.drawable.ic_cart), contentDescription = "Корзина")
                     Spacer(modifier = Modifier.padding(4.dp))
                     Text(text = (productsPriceCount.intValue / 100).toString() + " ₽")

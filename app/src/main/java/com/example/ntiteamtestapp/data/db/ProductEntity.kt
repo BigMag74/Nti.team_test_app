@@ -20,4 +20,5 @@ data class ProductEntity(
     val fatsPer100Grams: Float,
     val carbohydratesPer100Grams: Float,
     val tagIds: String,
+    val count: Int,
 )
